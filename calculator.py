@@ -1,6 +1,6 @@
 def read_input():
     result = 0
-    with open('test.txt', 'r') as file:
+    with open('input.txt', 'r') as file:
         for line in file:
             first_digit = get_first_digit(line)
             last_digit = get_last_digit(line)
@@ -9,7 +9,7 @@ def read_input():
 
             result = result + int(combined_digit)
 
-            print(combined_digit)
+
 
 
     return result
@@ -29,54 +29,74 @@ number_dict = {
 }
 
 
-def get_first_digit(line):
+def get_first_digit(full_line):
     # go through the line
 
     candidate = ""
+    counter = 1
 
-    for c in line:
+    for c in full_line:
+        candidate = c
+
         if c.isdigit(): 
             return c
         else:
-            # store the character
-            candidate += c
+            reduced_line = full_line[counter:]
             # check partial match
-            partial_match = False
-            for number in number_dict:
-                if candidate in number:
-                    partial_match = True
-            if partial_match == False:
-                candidate = c
+            for d in reduced_line:
+                candidate += d
+
+
+                partial_match = False
+                for number in number_dict:
+                    if candidate in number:
+                        partial_match = True
+                
+                if candidate in number_dict:
+                    return number_dict[candidate]
+                
+                if partial_match == False:
+                    break                    
+
             
-            if candidate in number_dict:
-                return number_dict[candidate]
+        counter = counter + 1
 
 
 
-def get_last_digit(line):
+def get_last_digit(full_line):
+
     candidate = ""
+    counter = 1
 
-    for c in reversed(line):
+    for c in full_line[::-1].strip():
+        candidate = c
         if c.isdigit(): 
             return c    
         else:
-            # store the character
-            candidate += c
-            reversed_candidate = candidate[::-1].strip()
-
-            # check partial match
-            partial_match = False
-            for number in number_dict:
-                if candidate in number[::-1]:
-                    partial_match = True
-            if partial_match == False:
-                candidate = c
+            reduced_reversed_line = full_line[::-1].strip()[counter:]
             
 
+            for d in reduced_reversed_line:
+                candidate += d
 
-            if reversed_candidate in number_dict:
-                return number_dict[reversed_candidate]
-            
+                partial_match = False
+                for number in number_dict:
+                    if candidate in number[::-1].strip():
+                        partial_match = True
+
+                
+                if candidate[::-1].strip() in number_dict:
+                    return number_dict[candidate[::-1].strip()]
+
+                
+                if partial_match == False:
+                    break
+                
+                           
+    
+        counter = counter + 1
+
+           
 
 def addition(first, last):
     return first + last
